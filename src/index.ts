@@ -9,6 +9,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 app.use(morgan("dev"));
@@ -19,9 +20,12 @@ app.use(
   })
 );
 
-app.get("/", (_req, res) => {
+app.get("/", (_req: any, res: any) => {
   res.send("Hello, TypeScript with Express!");
 });
+
+import userRoutes from "./routes/user.routes";
+app.use("/users", userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
