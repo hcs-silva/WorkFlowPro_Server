@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
 export enum UserRole {
-  FREELANCER = "Freelancer",
+  DEVELOPER = "Developer",
   CLIENT = "Client",
 }
 
@@ -14,7 +14,7 @@ const userSchema = new Schema({
   userRole: {
     type: String,
     enum: Object.values(UserRole),
-    default: UserRole.FREELANCER    
+    default: UserRole.DEVELOPER    
   },
   profilePicture: { type: String, default: "" },
   bio: { type: String, default: "" },

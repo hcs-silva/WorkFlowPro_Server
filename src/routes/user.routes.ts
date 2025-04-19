@@ -3,6 +3,7 @@ const router = express.Router();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/UserModel";
+import authMiddleware from "../middlewares/authMiddleware";
 
 interface LoginRequestBody {
   username: string;
@@ -87,7 +88,13 @@ const loginHandler: RequestHandler<{}, {}, LoginRequestBody> = async (req, res) 
 };
 
 router.post("/login", loginHandler);
- 
+
+router.get("/verify", authMiddleware, async (req, res) => {
+  res.status(200).json({
+    message: "User verified",
+    user: req.user,
+})
+})
 
 
 export default router;
