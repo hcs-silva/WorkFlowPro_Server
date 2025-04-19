@@ -1,11 +1,21 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
+export enum UserRole {
+  FREELANCER = "Freelancer",
+  CLIENT = "Client",
+}
+
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   isAdmin: { type: Boolean, default: false },
+  userRole: {
+    type: String,
+    enum: Object.values(UserRole),
+    default: UserRole.FREELANCER    
+  },
   profilePicture: { type: String, default: "" },
   bio: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },
