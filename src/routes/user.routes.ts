@@ -53,33 +53,36 @@ const loginHandler: RequestHandler<{}, {}, LoginRequestBody> = async (req, res) 
     // Request body validation
 
     if (typeof username !== 'string' || typeof password !== 'string') {
-      return res.status(400).json({ message: "Invalid request body" });
+      res.status(400).json({ message: "Invalid request body" });
+      return;
     }
     // Check if username and password are provided
     if (!username || !password) {
-      return res
-        .status(400)
-        .json({ message: "Username and Password are required" });
-    }else {
+      res.status(400).json({ message: "Username and Password are required" });
+      return;
+    } else {
       const user = await UserModel.findOne({ username });
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "User not found" });
+        return;
       }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        res.status(401).json({ message: "Invalid credentials" });
+        return;
       }
-      if(!process.env.TOKEN_SECRET) {
-        return res.status(500).json({ message: "Token secret not set" });
+      if (!process.env.TOKEN_SECRET) {
+        res.status(500).json({ message: "Token secret not set" });
+        return;
       }
-      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {expiresIn: '1h'});
+      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
       
-      res.status(200).json({message: "Login successful", token, user });
+      res.status(200).json({ message: "Login successful", token, user });
+      return;
     }
-
-
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
+    return;
   }
 };
 
